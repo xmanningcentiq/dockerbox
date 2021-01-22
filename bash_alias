@@ -1,0 +1,1 @@
+alias dockerbox='cd ${HOME}/projects/dockerbox && vagrant up && cd - && export DOCKER_HOST=ssh://vagrant@192.168.12.200'

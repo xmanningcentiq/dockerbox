@@ -68,14 +68,16 @@ Vagrant.configure("2") do |config|
 
 
   config.vm.provider "virtualbox" do |vb|
-    #vb.customize ['sharedfolder', 'add', :id, '--name', 'vbprojects', '--hostpath', "#{ENV['HOME']}/projects"]
     vb.gui    = false
     vb.name   = "Dockerbox"
     vb.cpus   = "2"
     vb.memory = "4096"
   end
 
+  config.vm.provision "file", source: "~/.gitconfig", destination: "/home/vagrant/.gitconfig"
+  config.vm.provision "file", source: "~/.ssh", destination: "/home/vagrant/.ssh_host"
   config.vm.provision "shell", inline: $provisioningScript
   # config.vm.provision "shell", path: ".provision/scripts/fix_fstab_uuid.sh"
   config.vm.provision "shell", inline: $ansibleScript
+  config.vm.provision "shell", inline: "cat /home/vagrant/.ssh_host/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys"
 end
