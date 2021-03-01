@@ -14,7 +14,7 @@ if [[ ! -f /VAGRANT_PROVISION ]] ; then
   echo "Creating virtualenv ... " | tee -a /VAGRANT_PROVISION
   if [[ ! -d /opt/ve-ansible ]] ; then
     sudo mkdir -p /etc/ansible
-    echo "localhost ansible_connection=local" | tee -a /etc/ansible/hosts
+    echo "localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python3" | tee -a /etc/ansible/hosts
     sudo python3 -m venv /opt/ve-ansible >> /VAGRANT_PROVISION && echo "Done"
   else
     echo "Virtualenv already exists." | tee -a /VAGRANT_PROVISION
@@ -23,8 +23,11 @@ if [[ ! -f /VAGRANT_PROVISION ]] ; then
   echo "Activating virtualenv ... " | tee -a /VAGRANT_PROVISION
   source /opt/ve-ansible/bin/activate && echo "Done"
 
+  echo "Updating pip ... " | tee -a /VAGRANT_PROVISION
+  pip3 install pip --upgrade
+
   echo "Installing ansible ... " | tee -a /VAGRANT_PROVISION
-  pip3 install wheel ansible==2.9.0 >> /VAGRANT_PROVISION && echo "Done"
+  pip3 install wheel ansible>=2.9.0 >> /VAGRANT_PROVISION && echo "Done"
 
   echo "Deactivating virtualenv ... " | tee -a /VAGRANT_PROVISION
   deactivate && echo "Done"
